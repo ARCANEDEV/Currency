@@ -1,0 +1,26 @@
+{
+    "name": "arcanedev/currency",
+    "description": "Currency Helper",
+    "minimum-stability": "dev",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ARCANEDEV",
+            "email": "arcanedev.maroc@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Arcanedev\\Currency\\" : "src/",
+            "Arcanedev\\Currency\\Tests\\" : "tests/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.3"
+    }
+}
