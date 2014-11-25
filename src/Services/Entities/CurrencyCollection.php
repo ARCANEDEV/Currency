@@ -8,11 +8,15 @@ class CurrencyCollection extends Collection
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-     protected $items;
+    /** @var array */
+    protected $items = [];
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
      | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * @param array $items
      */
     public function __construct($items = [])
     {
@@ -29,7 +33,7 @@ class CurrencyCollection extends Collection
         $currencies = array_get(get_currencies(), 'iso');
 
         foreach ($currencies as $iso => $currency) {
-            $iso        = strtoupper($iso);
+            $iso        = $this->prepareIso($iso);
             $currency   = Currency::loadFromArray($iso, $currency);
 
             $this->put($iso, $currency);
@@ -40,10 +44,39 @@ class CurrencyCollection extends Collection
      |  Check Functions
      | ------------------------------------------------------------------------------------------------
      */
-     public function has($iso)
-     {
-         $iso   = strtoupper($iso);
+    /**
+     * @param string $iso
+     *
+     * @return bool
+     */
+    public function has($iso)
+    {
+        $iso   = $this->prepareIso($iso);
 
-         return parent::has($iso);
-     }
+        return parent::has($iso);
+    }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Other Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * @param string $iso
+     *
+     * @return string
+     */
+    private function prepareIso($iso)
+    {
+        $this->checkIso($iso);
+
+        return strtoupper(trim($iso));
+    }
+
+    /**
+     * @param string $iso
+     */
+    private function checkIso($iso)
+    {
+        // TODO: Implements the checkIso($iso) function
+    }
 }

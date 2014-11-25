@@ -23,8 +23,9 @@ class Rate
      */
     public function __construct()
     {
-        $this->from = new Currency;
-        $this->to   = new Currency;
+        $currency = new Currency;
+        $this->setFrom($currency);
+        $this->setTo($currency);
         $this->setExchangeRate(0);
     }
 
@@ -32,6 +33,32 @@ class Rate
      |  Getters & Setters
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * @return string
+     */
+    public function getKey()
+    {
+        return implode('_', [
+            $this->getFromIso(),
+            $this->getToIso(),
+        ]);
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return Rate
+     */
+    public function setKey($key)
+    {
+        list($from, $to) = explode('_',$key);
+
+        $this->setIsoFrom($from);
+        $this->setIsoTo($to);
+
+        return $this;
+    }
+
     /**
      * @param float $rate
      *
@@ -54,6 +81,14 @@ class Rate
     public function getFrom()
     {
         return $this->from;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFromIso()
+    {
+        return $this->from->getIso();
     }
 
     /**
@@ -86,6 +121,11 @@ class Rate
     public function getTo()
     {
         return $this->to;
+    }
+
+    public function getToIso()
+    {
+        return $this->to->getIso();
     }
 
     /**
@@ -139,6 +179,11 @@ class Rate
         return $amount;
     }
 
+    /**
+     * @param string $iso
+     *
+     * @return Currency
+     */
     private function makeCurrency($iso)
     {
         return Currency::make($iso);
@@ -148,18 +193,24 @@ class Rate
      |  Check Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * @return bool
+     */
     public function isSameCurrencies()
     {
         return $this->from->getIso() === $this->to->getIso();
     }
 
+    /**
+     * @return bool
+     */
     public function isDifferentCurrencies()
     {
         return ! $this->isSameCurrencies();
     }
 
     /**
-     * @param $amount
+     * @param float $amount
      *
      * @throws InvalidTypeException
      * @throws \Exception
@@ -178,7 +229,7 @@ class Rate
     }
 
     /**
-     * @param $rate
+     * @param float $rate
      *
      * @throws InvalidTypeException
      * @throws \Exception

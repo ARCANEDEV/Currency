@@ -20,6 +20,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
      |  Test Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * @test
+     */
     public function testDummy()
     {
         $this->assertTrue(true);

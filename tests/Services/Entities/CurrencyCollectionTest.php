@@ -31,6 +31,9 @@ class CurrencyCollectionTest extends TestCase
      |  Test Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * @test
+     */
     public function testCanBeInstantiate()
     {
         $this->assertInstanceOf('Arcanedev\\Currency\\Services\\Entities\\CurrencyCollection', $this->currencies);
@@ -39,6 +42,9 @@ class CurrencyCollectionTest extends TestCase
         $this->assertCount(164, $this->currencies);
     }
 
+    /**
+     * @test
+     */
     public function testIfCurrencyExistsInCollection()
     {
         $this->assertTrue($this->currencies->has('USD'));
@@ -49,6 +55,9 @@ class CurrencyCollectionTest extends TestCase
         $this->assertFalse($this->currencies->has('LOL'));
     }
 
+    /**
+     * @test
+     */
     public function testCanGetCurrencyFromCollection()
     {
         $currency = $this->currencies->get('USD');

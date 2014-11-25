@@ -305,6 +305,11 @@ class Currency
         return $this;
     }
 
+    /**
+     * @param string $iso
+     *
+     * @return Currency
+     */
     public static function make($iso)
     {
         return new self($iso);
@@ -425,6 +430,11 @@ class Currency
     /* ------------------------------------------------------------------------------------------------
      |  Other Functions
      | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * @param string $key
+     *
+     * @return array
      */
     private function getOneFromConfig($key)
     {

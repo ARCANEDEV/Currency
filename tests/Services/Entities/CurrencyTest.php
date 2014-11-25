@@ -94,6 +94,9 @@ class CurrencyTest extends TestCase
         $this->currency->load('LOL');
     }
 
+    /**
+     * @test
+     */
     public function testCanFormatCurrency()
     {
         $this->assertEquals('100.00', $this->currency->load('USD')->format(100));
@@ -102,6 +105,9 @@ class CurrencyTest extends TestCase
         $this->assertEquals('2.000,00', $this->currency->load('EUR')->format(2000));
     }
 
+    /**
+     * @test
+     */
     public function testCanFormatCurrencyWithSymbol()
     {
         $this->assertEquals('$ 100.00', $this->currency->load('USD')->format(100, true));
@@ -110,6 +116,9 @@ class CurrencyTest extends TestCase
         $this->assertEquals('€ 2.000,00', $this->currency->load('EUR')->format(2000, true));
     }
 
+    /**
+     * @test
+     */
     public function testCanToggleSymbolPosition()
     {
         $this->currency->load('USD');
