@@ -1,9 +1,10 @@
 <?php namespace Arcanedev\Currency\Services\Providers;
 
+use Arcanedev\Currency\Contracts\CurrencyProvider;
 use Arcanedev\Currency\Helpers\CURL;
 use Arcanedev\Currency\Services\Entities\Rate;
 
-class FreeCurrencyConverterApi
+class FreeCurrencyConverterApi implements CurrencyProvider
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -116,6 +117,7 @@ class FreeCurrencyConverterApi
 
     /**
      * @param array $currencies
+     * @param bool  $compact
      *
      * @return mixed
      */
@@ -141,7 +143,26 @@ class FreeCurrencyConverterApi
     {
         $result = $this->client->sendRequest($url);
 
-        return json_decode($result, true);
+        $result = json_decode($result, true);
+
+        return $this->getResultEntity($result);
+    }
+
+    /**
+     * @param array $result
+     *
+     * @return array
+     */
+    private function getResultEntity($result)
+    {
+        $entity = [];
+
+        foreach($result as $key => $rate) {
+            list($from, $to) = explode('_', $key);
+            $entity[$from][$to] = $rate['val'];
+        }
+
+        return $entity;
     }
 
     /**

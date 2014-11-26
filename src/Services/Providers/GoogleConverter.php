@@ -1,6 +1,8 @@
 <?php namespace Arcanedev\Currency\Services\Providers;
 
-class GoogleConverter extends BaseProvider
+use Arcanedev\Currency\Contracts\CurrencyProvider;
+
+class GoogleConverter extends BaseProvider implements CurrencyProvider
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -43,6 +45,12 @@ class GoogleConverter extends BaseProvider
      |  Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * @param string $from
+     * @param string $to
+     *
+     * @return array
+     */
     public function convert($from, $to)
     {
         $ratio = $this->getRatio($from, $to);
@@ -52,5 +60,23 @@ class GoogleConverter extends BaseProvider
             'to'    => $to,
             'ratio' => $ratio,
         ];
+    }
+
+    /**
+     * @param array $currencies
+     *
+     * @return array
+     */
+    public function convertMany(array $currencies = [])
+    {
+        $ratios = [];
+
+        foreach ($currencies as $fromCurrency => $toCurrencies) {
+            foreach($toCurrencies as $toCurrency) {
+                $ratios[] = $this->convert($fromCurrency, $toCurrency);
+            }
+        }
+
+        return $ratios;
     }
 }
