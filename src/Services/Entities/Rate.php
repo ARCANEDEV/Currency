@@ -60,22 +60,6 @@ class Rate
     }
 
     /**
-     * @param float $rate
-     *
-     * @throws InvalidTypeException
-     *
-     * @return Rate
-     */
-    public function setExchangeRate($rate)
-    {
-        $this->checkExchangeRate($rate);
-
-        $this->exchangeRate = $rate;
-
-        return $this;
-    }
-
-    /**
      * @return Currency
      */
     public function getFrom()
@@ -123,6 +107,9 @@ class Rate
         return $this->to;
     }
 
+    /**
+     * @return string
+     */
     public function getToIso()
     {
         return $this->to->getIso();
@@ -150,6 +137,30 @@ class Rate
         $this->to   = $to;
 
         return $this;
+    }
+
+    /**
+     * @param float $rate
+     *
+     * @throws InvalidTypeException
+     *
+     * @return Rate
+     */
+    public function setExchangeRate($rate)
+    {
+        $this->checkExchangeRate($rate);
+
+        $this->exchangeRate = $rate;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getExchangeRate()
+    {
+        return $this->exchangeRate;
     }
 
     /* ------------------------------------------------------------------------------------------------
