@@ -297,6 +297,16 @@ class Currency
      *
      * @return Currency
      */
+    public static function make($iso)
+    {
+        return new self($iso);
+    }
+
+    /**
+     * @param string $iso
+     *
+     * @return Currency
+     */
     public function load($iso)
     {
         $this->setIso($iso);
@@ -305,17 +315,7 @@ class Currency
         return $this;
     }
 
-    /**
-     * @param string $iso
-     *
-     * @return Currency
-     */
-    public static function make($iso)
-    {
-        return new self($iso);
-    }
-
-    private function loadCurrency()
+    protected function loadCurrency()
     {
         $iso        = $this->getIso();
 
@@ -400,7 +400,7 @@ class Currency
      * @throws InvalidIsoException
      * @throws NotFoundIsoException
      */
-    private function checkIso(&$iso)
+    protected function checkIso(&$iso)
     {
         if ( ! is_string($iso) ) {
             throw new InvalidTypeException("The ISO must be a string, " . gettype($iso) . " was given.");
@@ -422,7 +422,7 @@ class Currency
      *
      * @return bool
      */
-    private function isExists($iso)
+    protected function isExists($iso)
     {
         return ! is_null($this->getOneFromConfig($iso));
     }
@@ -436,7 +436,7 @@ class Currency
      *
      * @return array
      */
-    private function getOneFromConfig($key)
+    protected function getOneFromConfig($key)
     {
         $key = strtolower($key);
 

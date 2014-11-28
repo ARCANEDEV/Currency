@@ -226,7 +226,7 @@ class Rate
      * @throws InvalidTypeException
      * @throws \Exception
      */
-    private function checkAmount(&$amount)
+    protected function checkAmount(&$amount)
     {
         if ( ! is_numeric($amount) ) {
             throw new InvalidTypeException('The exchange rate must be a numeric value.');
@@ -245,7 +245,7 @@ class Rate
      * @throws InvalidTypeException
      * @throws \Exception
      */
-    private function checkExchangeRate(&$rate)
+    protected function checkExchangeRate(&$rate)
     {
         if ( ! is_numeric($rate) ) {
             throw new InvalidTypeException('The exchange rate must be a numeric value.');

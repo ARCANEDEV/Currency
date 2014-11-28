@@ -28,7 +28,7 @@ class CurrencyCollection extends Collection
         }
     }
 
-    private function loadCurrencies()
+    protected function loadCurrencies()
     {
         $currencies = array_get(get_currencies(), 'iso');
 
@@ -65,7 +65,7 @@ class CurrencyCollection extends Collection
      *
      * @return string
      */
-    private function prepareIso($iso)
+    protected function prepareIso($iso)
     {
         $this->checkIso($iso);
 
@@ -75,7 +75,7 @@ class CurrencyCollection extends Collection
     /**
      * @param string $iso
      */
-    private function checkIso($iso)
+    protected function checkIso($iso)
     {
         // TODO: Implements the checkIso($iso) function
     }

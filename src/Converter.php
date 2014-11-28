@@ -66,8 +66,7 @@ class Converter
      */
     public function addMany(array $currencies)
     {
-        foreach ($currencies as $fromCurrency => $toCurrencies)
-        {
+        foreach ($currencies as $fromCurrency => $toCurrencies) {
             $this->add($fromCurrency, $toCurrencies);
         }
 

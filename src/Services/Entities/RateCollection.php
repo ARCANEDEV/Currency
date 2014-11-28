@@ -127,7 +127,7 @@ class RateCollection extends Collection
     /**
      * @param float $amount
      */
-    private function checkAmount($amount)
+    protected function checkAmount($amount)
     {
     }
 
