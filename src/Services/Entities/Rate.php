@@ -51,7 +51,7 @@ class Rate
      */
     public function setKey($key)
     {
-        list($from, $to) = explode('_',$key);
+        list($from, $to) = explode('_', $key);
 
         $this->setIsoFrom($from);
         $this->setIsoTo($to);

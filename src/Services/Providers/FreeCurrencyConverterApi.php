@@ -4,16 +4,19 @@ use Arcanedev\Currency\Contracts\CurrencyProvider;
 use Arcanedev\Currency\Helpers\CURL;
 use Arcanedev\Currency\Services\Entities\Rate;
 
-class FreeCurrencyConverterApi implements CurrencyProvider
+class FreeCurrencyConverterApi extends BaseProvider implements CurrencyProvider
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
+    /** @var string */
     protected $baseUrl = 'http://www.freecurrencyconverterapi.com/api';
 
+    /** @var string */
     protected $version = 'v2';
 
+    /** @var array */
     protected $query = [];
 
     /** @var CURL */
@@ -23,10 +26,9 @@ class FreeCurrencyConverterApi implements CurrencyProvider
      |  Constructor
      | ------------------------------------------------------------------------------------------------
      */
-    function __construct()
+    public function __construct()
     {
-        $this->query    = [];
-        $this->client   = new CURL;
+        parent::__construct();
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -44,16 +46,6 @@ class FreeCurrencyConverterApi implements CurrencyProvider
      */
     /**
      * @param string $endpoint
-     *
-     * @return string
-     */
-    protected function prepareUrl($endpoint = '')
-    {
-        return implode('/', [$this->baseUrl, $this->version, $endpoint]);
-    }
-
-    /**
-     * @param string $endpoint
      * @param bool $compact
      *
      * @return string
@@ -61,24 +53,17 @@ class FreeCurrencyConverterApi implements CurrencyProvider
     private function prepareQuery($endpoint, $compact)
     {
         $url = $this->prepareUrl($endpoint) . $this->getQuery();
-        if ( $compact )
+
+        if ( $compact ) {
             $url .= '&compact=y';
+        }
 
         return $url;
     }
 
-    public function getCurrenciesKey($from, $to)
+    protected function formatCurrencyKey($from, $to)
     {
-        return strtoupper($from . '_' . $to);
-    }
-
-    /**
-     * @param string $from
-     * @param string $to
-     */
-    public function addConverter($from, $to)
-    {
-        $this->query[] = $this->getCurrenciesKey($from, $to);
+        return strtoupper(trim($from) . '_' . trim($to));
     }
 
     public function getAll()
@@ -94,40 +79,35 @@ class FreeCurrencyConverterApi implements CurrencyProvider
      * @param string $to
      * @param bool   $compact
      *
-     * @return mixed
+     * @return Rate
      */
     public function convert($from, $to, $compact = true)
     {
-        $this->addConverter($from, $to);
+        $this->addCurrency($from, $to);
 
         $url    = $this->prepareQuery('convert', $compact);
 
         $result = $this->getResult($url);
 
-        $key    = $this->getCurrenciesKey($from, $to);
+        $key    = $this->getRateKey($from, $to);
 
-        $ratio  = (new Rate())
+        $rate  = (new Rate())
             ->setIsoFrom($from)
             ->setIsoTo($to)
-            ->setRatio($result[$key]['val']);
+            ->setExchangeRate($result[$key]['val']);
 
-        return $ratio;
+        return $rate;
     }
-
 
     /**
      * @param array $currencies
      * @param bool  $compact
      *
-     * @return mixed
+     * @return array
      */
     public function convertMany(array $currencies = [], $compact = true)
     {
-        foreach ($currencies as $from => $toCurrencies) {
-            foreach ($toCurrencies as $to) {
-                $this->addConverter($from, $to);
-            }
-        }
+        $this->addManyCurrencies($currencies);
 
         $url    = $this->prepareQuery('convert', $compact);
 
@@ -158,7 +138,7 @@ class FreeCurrencyConverterApi implements CurrencyProvider
         $entity = [];
 
         foreach($result as $key => $rate) {
-            list($from, $to) = explode('_', $key);
+            list($from, $to)    = explode('_', $key);
             $entity[$from][$to] = $rate['val'];
         }
 
@@ -168,7 +148,7 @@ class FreeCurrencyConverterApi implements CurrencyProvider
     /**
      * @param string $from
      * @param string $to
-     * @param float $amount
+     * @param float  $amount
      *
      * @return float
      */
